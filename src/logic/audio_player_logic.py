@@ -111,16 +111,31 @@ class AudioPlayer():
     def __init__(self):
         self.playlist = Playlist()
         self.sub_playlist = None
+        self.current_playlist = self.playlist
         self.current = None
 
-    def play(self) -> None:
-        if (self.playlist.get_size() == 0):
+    def play_current_song(self) -> None:
+        if (self.current_playlist.get_size() == 0):
             raise EmptyPlaylistError("La playlist está vacía")
 
         if self.current is None:
-            self.current = self.playlist.get_head()
-            message_start = f"🎧 Reproduciendo: {self.current.song.title} de {self.current.song.artist}"
+            self.current = self.current_playlist.get_head()
+        message_start = f"🎧 Reproduciendo: {self.current.song.title} de {self.current.song.artist}"
         return (message_start)
+    
+    def play_song(self, title: str) -> str:
+        if self.current_playlist.get_size() == 0:
+            raise EmptyPlaylistError("La playlist está vacía")
+
+        current = self.current_playlist.get_head()
+        for _ in range(self.current_playlist.get_size()):
+            if title == current.song.title:
+                self.current = current  # Actualiza la canción actual
+                return f"🎧 Reproduciendo: {current.song.title} de {current.song.artist}"
+            current = current.next
+
+        return "⛔ No hay canción seleccionada para reproducir."
+
 
     def simulate_playback(self):
         if self.current:
@@ -132,7 +147,7 @@ class AudioPlayer():
             return (message_end)
 
     def next_song(self):
-        if (self.playlist.get_size() == 0):
+        if (self.current_playlist.get_size() == 0):
             raise EmptyPlaylistError("La playlist está vacía")
 
         if self.current:
@@ -142,7 +157,7 @@ class AudioPlayer():
             return f"No se está reproduciendo actualmente ninguna canción"
 
     def previous_song(self):
-        if (self.playlist.get_size() == 0):
+        if (self.current_playlist.get_size() == 0):
             raise EmptyPlaylistError("La playlist está vacía")
 
         if self.current:
@@ -158,17 +173,17 @@ class AudioPlayer():
             return "No hay ninguna canción seleccionada."
 
     def show_playlist(self):
-        if (self.playlist.get_size() == 0):
+        if (self.current_playlist.get_size() == 0):
             return f"La playlist está vacía"
-        return str(self.playlist)
+        return str(self.current_playlist)
 
     def shuffle(self):
-        if self.playlist.get_size() == 0:
+        if self.current_playlist.get_size() == 0:
             raise EmptyPlaylistError("La playlist está vacía")
 
         songs = [] 
-        current = self.playlist.get_head()
-        for _ in range(self.playlist.get_size()):
+        current = self.current_playlist.get_head()
+        for _ in range(self.current_playlist.get_size()):
             songs.append(current.song.title)
             current = current.next
 
@@ -176,9 +191,9 @@ class AudioPlayer():
             random_title = random.choice(songs)
             songs.remove(random_title)
 
-            current = self.playlist.get_head()
+            current = self.current_playlist.get_head()
 
-            for _ in range(self.playlist.get_size()):
+            for _ in range(self.current_playlist.get_size()):
                 if current.song.title == random_title:
                     self.current = current
                     print(f"Reproduciendo aleatoriamente: {self.current.song.title} de {self.current.song.artist}")
@@ -188,12 +203,12 @@ class AudioPlayer():
                 current = current.next
 
     def generate_subplaylist(self, songs_titles: list[str]) -> Playlist:
-        if (self.playlist.get_size() == 0):
+        if (self.current_playlist.get_size() == 0):
             raise EmptyPlaylistError("La playlist original está vacía, no hay canciones para generar una subplaylist")
 
         sub_playlist = Playlist()
-        current = self.playlist.get_head()
-        for _ in range(self.playlist.get_size()):
+        current = self.current_playlist.get_head()
+        for _ in range(self.current_playlist.get_size()):
             if current.song.title in songs_titles:
                 sub_playlist.add_song(current.song)
             current = current.next
@@ -201,6 +216,16 @@ class AudioPlayer():
         self.sub_playlist = sub_playlist
         return sub_playlist
 
+    def play_playlist(self):
+        if self.current_playlist.get_size() == 0:
+            raise EmptyPlaylistError("La playlist está vacía")
+        
+        self.current = self.current_playlist.get_head()                                  
+        for _ in range(self.current_playlist.get_size()):
+            print(self.play_current_song())
+            print(self.simulate_playback())
+            time.sleep(2)
+            self.next_song()
 
     def advance_song(self):
         pass
