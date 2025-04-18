@@ -1,3 +1,4 @@
+import time
 import sys
 sys.path.append("src")
 from src.logic.audio_player_logic import AudioPlayer, Song
@@ -27,10 +28,14 @@ def show_menu():
 
 
 player = AudioPlayer()
+player.playlist.add_song(Song("Song 1", "Artist 1", 3.5))
+player.playlist.add_song(Song("Song 2", "Artist 2", 4.0))
+player.playlist.add_song(Song("Song 3", "Artist 3", 2.5))
+player.playlist.add_song(Song("Song 4", "Artist 4", 5.0))
 
 while True:
     show_menu()
-    option = int(input("Selecciona una opción: "))
+    option = input("Selecciona una opción: ")
 
     if option == "1":
         title, artist, duration = data_song()
@@ -39,32 +44,46 @@ while True:
         print(f"Se ha añadido la canción: {song.title} de {song.artist} a la playlist exitosamente")
 
     elif option == "2": ## REVISAR
-        player.play()
-        messages = player.simulate_playback()
-        for msg in messages:
-            print(msg)
+        print(player.play())
+        print(player.simulate_playback())
+
 
     elif option == "3":
+        if player.playlist.get_size() == 1:
+            print("Solo hay una canción en la playlist, se seguirá reproduciendo la misma canción")
         print(player.next_song())
+
     elif option == "4":
+        if player.playlist.get_size() == 1:
+            print("Solo hay una canción en la playlist, se seguirá reproduciendo la misma canción")
         print(player.previous_song())
+
     elif option == "5":
         title = input("Introduce el título de la canción a eliminar: ")
         player.playlist.remove_song(title)
         print(f"Se ha eliminado la canción: {title} de la playlist exitosamente")
+
     elif option == "6":
         print(player.show_current_song())
+
     elif option == "7":
         print(player.show_playlist())
+
     elif option == "8":
         print("Activando modo aleatorio...")
+        time.sleep(3)  
         print(player.shuffle())
-        print("Modo aleatorio activado")
 
     elif option == "9":
         ...
     elif option == "10":
-        ...
+        print("La playlist actual tiene las siguientes canciones:")
+        print(player.show_playlist())
+        titles_ = input("Introduce los títulos de las canciones que quiere agregar en la subplaylist (separados por coma): ")
+        titles = titles_.split(", ")
+        sub_playlist = player.generate_subplaylist(titles)
+        print("Subplaylist generada:")
+        print(sub_playlist)
 
     elif option == "11":
         print("Saliendo del sistema...")

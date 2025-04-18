@@ -110,6 +110,7 @@ class Playlist(): # Va a ser la lista enlazada circular
 class AudioPlayer():
     def __init__(self):
         self.playlist = Playlist()
+        self.sub_playlist = None
         self.current = None
 
     def play(self) -> None:
@@ -118,23 +119,24 @@ class AudioPlayer():
 
         if self.current is None:
             self.current = self.playlist.get_head()
-        return 
+            message_start = f"🎧 Reproduciendo: {self.current.song.title} de {self.current.song.artist}"
+        return (message_start)
 
     def simulate_playback(self):
         if self.current:
-            message_start = f"🎧 Sonando: {self.current.song.title} de {self.current.song.artist}"
             time.sleep(self.current.song.duration)  
             message_end = "🎶 Canción finalizada."
-            return (message_start, message_end)
+            return (message_end)
         else:
-            return ("⛔ No hay canción seleccionada para reproducir.")
+            message_end = "⛔ No hay canción seleccionada para reproducir."
+            return (message_end)
 
     def next_song(self):
         if (self.playlist.get_size() == 0):
             raise EmptyPlaylistError("La playlist está vacía")
 
         if self.current:
-            self.current = self.current.next
+            self.current = self.current.next                
             return f"Reproduciendo la siguiente canción de la playlist: {self.current.song}"
         else:
             return f"No se está reproduciendo actualmente ninguna canción"
@@ -164,27 +166,41 @@ class AudioPlayer():
         if self.playlist.get_size() == 0:
             raise EmptyPlaylistError("La playlist está vacía")
 
-        songs = []
+        songs = [] 
         current = self.playlist.get_head()
         for _ in range(self.playlist.get_size()):
             songs.append(current.song.title)
             current = current.next
 
-        print(songs)
-        random_title = random.choice(songs)
+        while songs: 
+            random_title = random.choice(songs)
+            songs.remove(random_title)
 
+            current = self.playlist.get_head()
+
+            for _ in range(self.playlist.get_size()):
+                if current.song.title == random_title:
+                    self.current = current
+                    print(f"Reproduciendo aleatoriamente: {self.current.song.title} de {self.current.song.artist}")
+                    print(self.simulate_playback())
+                    time.sleep(2)
+                    break
+                current = current.next
+
+    def generate_subplaylist(self, songs_titles: list[str]) -> Playlist:
+        if (self.playlist.get_size() == 0):
+            raise EmptyPlaylistError("La playlist original está vacía, no hay canciones para generar una subplaylist")
+
+        sub_playlist = Playlist()
         current = self.playlist.get_head()
-
         for _ in range(self.playlist.get_size()):
-            if current.song.title == random_title:
-                self.current = current
-                break
+            if current.song.title in songs_titles:
+                sub_playlist.add_song(current.song)
             current = current.next
 
-        return f"🔀 Reproduciendo aleatoriamente: {random_title}"
-    
-    def generate_subplaylist(self):
-        pass
+        self.sub_playlist = sub_playlist
+        return sub_playlist
+
 
     def advance_song(self):
         pass
