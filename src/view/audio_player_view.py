@@ -49,6 +49,7 @@ player.playlist.add_song(Song("Song 3", "Artist 3", 2.5))
 player.playlist.add_song(Song("Song 4", "Artist 4", 5.0))
 
 while True:
+    input("\nPresiona Enter para mostrar el menú...")
     show_menu()
 
     if player.sub_playlist is not None:
