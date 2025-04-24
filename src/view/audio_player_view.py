@@ -1,7 +1,7 @@
 import time
 import sys
 sys.path.append("src")
-from src.logic.audio_player_logic import AudioPlayer, Song
+from logic.audio_player_logic import AudioPlayer, Song
 
 def data_song():
     print("🎶 Introduce los datos de la canción 🎶")
@@ -25,6 +25,7 @@ def show_menu():
     print("10.  Activar modo aleatorio 🔀") 
     print("11. Adelantar canción ⏩") # PENDIENTE
     print("12. Generar una subplaylist 🧩") 
+    print("20. !!! SUSTENTACION - top 3 canciones que más duran")
     print("_______________________________\n")
     print("13. Salir 🚪")
 
@@ -127,10 +128,16 @@ while True:
         sub_playlist = player.generate_subplaylist(titles)
         print("Subplaylist generada:")
         print(sub_playlist)
+    
+    elif option == "20":
+        print("Las 3 canciones que mas duran son: ")
+        top_sub_playlist = player.top_canciones_largas()
+        print(player.show_playlist())
 
     elif option == "13":
         print("👋 ¡Hasta pronto! Cerrando el reproductor...")
         break
     else:
         print("❌ Opción no válida. Por favor, elige una opción del menú.")
+
 
