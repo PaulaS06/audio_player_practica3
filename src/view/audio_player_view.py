@@ -4,43 +4,40 @@ sys.path.append("src")
 from src.logic.audio_player_logic import AudioPlayer, Song
 
 def data_song():
-    print("Introduce los datos de la canción")
-    name = input("Título: ")
-    artist = input("Artista: ")
-    duration = float(input("Duración (en segundos): "))
+    print("🎶 Introduce los datos de la canción 🎶")
+    name = input("🎵 Título: ")
+    artist = input("🎤 Artista: ")
+    duration = float(input("⏱️ Duración (en segundos): "))
     return name, artist, duration
 
 def show_menu():
-    print("\n=== Bienvenido - Reproductor de música ===")
-    print("Ingresa el número de la opción que deseas realizar")
+    print("\n🎼 === Bienvenido - Reproductor de música === 🎼")
+    print("📋 Ingresa el número de la opción que deseas realizar")
     print("1. Añadir canción a la playlist desde el principio")
     print("2. Reproducir la primera canción de la playlist")
     print("3. Reproducir canción por su nombre")
-    print("4. Avanzar a la siguiente canción")
-    print("5. Devolverse a la canción anterior")
-    print("6. Eliminar canción por su nombre")
-    print("7. Mostrar canción actual")
-    print("8. Mostrar playlist")
-    print("9. Reproducir playlist")
-    print("10. Activar modo aleatorio") 
-    print("11. Adelantar canción") # PENDIENTE
-    print("12. Generar una subplaylist") 
+    print("4. Avanzar a la siguiente canción ⏭️")
+    print("5. Devolverse a la canción anterior ⏮️")
+    print("6. Eliminar canción por su nombre ❌")
+    print("7. Mostrar canción actual 🎧")
+    print("8. Mostrar playlist 📜")
+    print("9. Reproducir playlist ▶️")
+    print("10.  Activar modo aleatorio 🔀") 
+    print("11. Adelantar canción ⏩") # PENDIENTE
+    print("12. Generar una subplaylist 🧩") 
     print("_______________________________\n")
-    print("13. Salir")
+    print("13. Salir 🚪")
 
 def ask_playlist():
-    print("¿Ingresa 'p' si quieres actuar sobre la playlist original o 's' sobre la subplaylist que creaste?")
-    choise = input("p/s: ")
+    print("🎵 ¿Quieres usar la playlist original o una subplaylist?")
+    choise = input("Escribe 'p' (playlist original) o 's' (subplaylist): ")
     if choise.lower() == "p":
         return choise
     elif choise.lower() == "s":
         return choise
     else:
-        print("Opción no válida. Por favor, elige una opción del menú.")
+        print("⚠️ Opción no válida. Intenta de nuevo.")
         ask_playlist()
-
-
-
 
 player = AudioPlayer()
 player.playlist.add_song(Song("Song 1", "Artist 1", 3.5))
@@ -67,12 +64,16 @@ while True:
         title, artist, duration = data_song()
         song = Song(title, artist, duration)
         player.playlist.add_song(song)
-        print(f"Se ha añadido la canción: {song.title} de {song.artist} a la playlist exitosamente")
+        print(f"✅ Se ha añadido la canción: {song.title} de {song.artist} a la playlist 🎶")
 
     elif option == "2":
-        pass
+        if player.current_playlist.get_size() == 0:
+            print("La playlist está vacía, no se puede reproducir ninguna canción")
+        else:
+            print(player.play_current_song())
+            print(player.simulate_playback())
 
-    elif option == "3": ## REVISAR
+    elif option == "3": 
         song_title = input("Introduce el título de la canción a reproducir: ")
         print(player.play_song(song_title))
         print(player.simulate_playback())
@@ -80,18 +81,18 @@ while True:
 
     elif option == "4":
         if player.current_playlist.get_size() == 1:
-            print("Solo hay una canción en la playlist, se seguirá reproduciendo la misma canción")
+            print("ℹ️ Solo hay una canción, se seguirá reproduciendo la misma 🎵")
         print(player.next_song())
 
     elif option == "5":
         if player.current_playlist.get_size() == 1:
-            print("Solo hay una canción en la playlist, se seguirá reproduciendo la misma canción")
+            print("ℹ️ Solo hay una canción, se seguirá reproduciendo la misma 🎵")
         print(player.previous_song())
 
     elif option == "6":
         title = input("Introduce el título de la canción a eliminar: ")
         player.current_playlist.remove_song(title)
-        print(f"Se ha eliminado la canción: {title} de la playlist exitosamente")
+        print(f"🗑️ Se ha eliminado la canción: {title} de la playlist")
 
     elif option == "7":
         print(player.show_current_song())
@@ -100,12 +101,12 @@ while True:
         print(player.show_playlist())
 
     elif option == "9":
-        print("Reproduciendo playlist...")
+        print("▶️ Reproduciendo playlist completa...")
         player.play_playlist()
-        print("Se terminó de reproducir la playlist")
+        print("✅ Playlist finalizada")
 
     elif option == "10":
-        print("Activando modo aleatorio...")
+        print("🔄 Activando modo aleatorio, espera un momento...")
         time.sleep(3)  
         print(player.shuffle())
 
@@ -116,7 +117,7 @@ while True:
             for msg in result:
                 print(msg)
         except ValueError:
-            print("Porcentaje inválido. Debe ser un número.")
+            print("⚠️ Porcentaje inválido. Debe ser un número.")
 
     elif option == "12":
         print("La playlist actual tiene las siguientes canciones:")
@@ -128,8 +129,8 @@ while True:
         print(sub_playlist)
 
     elif option == "13":
-        print("Saliendo del sistema...")
+        print("👋 ¡Hasta pronto! Cerrando el reproductor...")
         break
     else:
-        print("Opción no válida. Por favor, elige una opción del menú.")
+        print("❌ Opción no válida. Por favor, elige una opción del menú.")
 

@@ -130,7 +130,7 @@ class AudioPlayer():
         current = self.current_playlist.get_head()
         for _ in range(self.current_playlist.get_size()):
             if title == current.song.title:
-                self.current = current  # Actualiza la canción actual
+                self.current = current  
                 return f"🎧 Reproduciendo: {current.song.title} de {current.song.artist}"
             current = current.next
 
