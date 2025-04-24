@@ -8,6 +8,8 @@ def data_song():
     name = input("🎵 Título: ")
     artist = input("🎤 Artista: ")
     duration = float(input("⏱️ Duración (en segundos): "))
+    while duration <= 0:
+        duration = float(input("❌ Duración incorrecta, tiene que ser un número mayor a cero (en segundos): "))
     return name, artist, duration
 
 def show_menu():
