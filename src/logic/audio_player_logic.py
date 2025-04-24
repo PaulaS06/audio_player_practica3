@@ -227,6 +227,33 @@ class AudioPlayer():
             time.sleep(2)
             self.next_song()
 
-    def advance_song(self):
-        pass
+    def advance_song(self, percent: float) -> list[str]:
+        messages = []
 
+        if self.current is None:
+            if self.current_playlist.get_size() == 0:
+                raise EmptyPlaylistError("La playlist está vacía")
+            self.current = self.current_playlist.get_head()
+            messages.append(f"No había canción seleccionada. Iniciando desde la primera: {self.current.song.title}")
+
+        duration = self.current.song.duration
+        avance = duration * (percent / 100)
+
+        messages.append(f"Adelantando {percent}% de la canción: {self.current.song.title}")
+        messages.append(f"Simulando adelanto de {avance:.2f}s...")
+
+        time.sleep(avance)
+
+        if avance >= duration:
+            messages.append("Tiempo adelantado excede la duración. Pasando a la siguiente canción...")
+            self.current = self.current.next
+            messages.append(f"🎧 Reproduciendo: {self.current.song.title} de {self.current.song.artist}")
+            time.sleep(self.current.song.duration)
+            messages.append("🎶 Canción finalizada.")
+        else:
+            restante = duration - avance
+            messages.append(f"Reproduciendo los últimos {restante:.2f}s de la canción...")
+            time.sleep(restante)
+            messages.append("🎶 Canción finalizada.")
+
+        return messages

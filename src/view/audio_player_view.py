@@ -110,7 +110,14 @@ while True:
         print(player.shuffle())
 
     elif option == "11":
-        ...
+        try:
+            percent = float(input("¿Cuánto porcentaje quieres adelantar? (ej: 25): "))
+            result = player.advance_song(percent)
+            for msg in result:
+                print(msg)
+        except ValueError:
+            print("Porcentaje inválido. Debe ser un número.")
+
     elif option == "12":
         print("La playlist actual tiene las siguientes canciones:")
         print(player.show_playlist())
