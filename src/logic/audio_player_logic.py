@@ -257,3 +257,32 @@ class AudioPlayer():
             messages.append("🎶 Canción finalizada.")
 
         return messages
+
+    # def top_canciones_largas(self):
+    #     top_sub_playlist = Playlist()
+    #     durations = []
+
+    #     current = self.current_playlist.get_head()
+    #     for _ in range(self.current_playlist.get_size()):
+    #         durations.append(current.song.duration)
+    #         current = current.next
+                
+    #     print("Lista de las duraciones:",  durations)
+    #     durations.sort(reverse=True)
+    #     print("Lista de las duraciones:",  durations)
+
+    #     top_3_durations = durations[:3]
+    #     print("Top 3 de las duraciones mas largas", top_3_durations)
+
+    #     current = self.current_playlist.get_head()
+    #     for duration in top_3_durations: 
+    #         print("Top 3 de las duraciones mas largas", top_3_durations)
+    #         for _ in range(self.current_playlist.get_size()):
+    #             print("recorriendo la duracion", duration)
+    #             if duration == current.song.duration:
+    #                 top_sub_playlist.add_song(current.song)
+    #                 print("Se añadió a:", current.song.title)
+    #             current = current.next
+
+    #     self.current_playlist = top_sub_playlist
+    #     return(top_sub_playlist)
